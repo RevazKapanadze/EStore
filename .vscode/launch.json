@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "2.0.0",
   "configurations": [
     {
       // Use IntelliSense to find out which attributes exist for C# debugging
@@ -13,6 +13,7 @@
       "program": "${workspaceFolder}/bin/Debug/net6.0/EStore.dll",
       "args": [],
       "cwd": "${workspaceFolder}",
+      "url": "https://localhost:5001/swagger/index.html",
       "stopAtEntry": false,
       // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
       "serverReadyAction": {
@@ -30,6 +31,13 @@
       "name": ".NET Core Attach",
       "type": "coreclr",
       "request": "attach"
+    },
+    {
+      "name": "Launch Chrome",
+      "request": "launch",
+      "type": "chrome",
+      "url": "https://localhost:5001/swagger/index.html",
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }
