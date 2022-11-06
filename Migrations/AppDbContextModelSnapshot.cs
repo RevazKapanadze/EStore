@@ -43,7 +43,7 @@ namespace EStore.Migrations
 
                     b.HasIndex("mainCategory_Id");
 
-                    b.ToTable("CATEGORY");
+                    b.ToTable("CATEGORY", (string)null);
                 });
 
             modelBuilder.Entity("EStore.Data.Models.company", b =>
@@ -65,7 +65,7 @@ namespace EStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("COMPANY");
+                    b.ToTable("COMPANY", (string)null);
                 });
 
             modelBuilder.Entity("EStore.Data.Models.item", b =>
@@ -109,7 +109,7 @@ namespace EStore.Migrations
 
                     b.HasIndex("Company_Id");
 
-                    b.ToTable("ITEMS");
+                    b.ToTable("ITEMS", (string)null);
                 });
 
             modelBuilder.Entity("EStore.Data.Models.item_Details", b =>
@@ -142,7 +142,7 @@ namespace EStore.Migrations
 
                     b.HasIndex("Item_Id");
 
-                    b.ToTable("ITEM_DETAILS");
+                    b.ToTable("ITEM_DETAILS", (string)null);
                 });
 
             modelBuilder.Entity("EStore.Data.Models.item_Photoes", b =>
@@ -163,7 +163,7 @@ namespace EStore.Migrations
 
                     b.HasIndex("Item_Id");
 
-                    b.ToTable("ITEM_PHOTOES");
+                    b.ToTable("ITEM_PHOTOES", (string)null);
                 });
 
             modelBuilder.Entity("EStore.Data.Models.mainCategory", b =>
@@ -182,7 +182,7 @@ namespace EStore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MAINCATEGORY");
+                    b.ToTable("MAINCATEGORY", (string)null);
                 });
 
             modelBuilder.Entity("EStore.Data.Models.user", b =>

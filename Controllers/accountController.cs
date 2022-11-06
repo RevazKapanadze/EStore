@@ -28,7 +28,6 @@ namespace EStore.Controllers
       {
         Email = user.Email,
         Token = await _token.GenerateToken(user)
-
       };
     }
     [HttpPost("register_User")]
@@ -63,9 +62,6 @@ namespace EStore.Controllers
         Email = user.Email,
         Token = await _token.GenerateToken(user)
       };
-
     }
-
-
   }
 }

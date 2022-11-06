@@ -21,17 +21,17 @@ namespace EStore.Data.Services
     {
       _user = user;
     }
-    public async Task<bool> IsUserAdmin(string userName)
-    {
-      var user = await _user.FindByNameAsync(userName);
-      var role = await _user.GetRolesAsync(user);
-      if (role == null)
-      {
-        return false;
-      }
-      var isAdmin = role[0] == "Admin";
-      return isAdmin;
-    }
-
+    /* public async Task<bool> IsUserAdmin(string userName)
+     {
+       var user = await _user.FindByNameAsync(userName);
+       var role = await _user.GetRolesAsync(user);
+       if (role == null)
+       {
+         return false;
+       }
+       var isAdmin = role[0] == "Admin";
+       return isAdmin;
+     }
+ */
   }
 }

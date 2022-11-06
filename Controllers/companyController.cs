@@ -26,7 +26,7 @@ namespace EStore.Controllers
       _user = user;
       _logic = logic;
     }
-    [Authorize]
+    [Authorize(Roles = "Admin, User")]
     [HttpPost("Add_Item")]
     public async Task<ActionResult> AddItem(itemVm _itemVm)
     {
@@ -47,7 +47,8 @@ namespace EStore.Controllers
       await _context.SaveChangesAsync();
       return Ok(_item.Id);
     }
-    [Authorize]
+
+    [Authorize(Roles = "Admin, User")]
     [HttpPost("Add_Item_Photoes")]
     public async Task<ActionResult> AddItemPhotoes(itemPhotoesVm _itemPhotoesVm)
     {
@@ -66,25 +67,83 @@ namespace EStore.Controllers
       await _context.SaveChangesAsync();
       return Ok();
     }
-    [Authorize]
+    [Authorize(Roles = "Admin, User")]
     [HttpPost("Add_Item_Details")]
     public async Task<ActionResult> AddItemDetails(itemDetailsVm _itemDetailsVm)
     {
       var user = await _user.FindByNameAsync(User.Identity.Name);
-      var item = await _context.ITEMS.Where(o => o.Id == _itemDetailsVm.Item_Id).FirstOrDefaultAsync();
-      if (item.Company_Id != user.Company_Id)
+      var item = await _context.ITEMS.Where(o => o.Id == _itemDetailsVm.Item_Id).SingleOrDefaultAsync();
+      if (item == null)
+      {
+        return Unauthorized("there's no item mannn");
+      }
+      else if (item.Company_Id != user.Company_Id)
       {
         return Unauthorized();
       }
       var _itemDetails = new item_Details
       {
         Item_Id = _itemDetailsVm.Item_Id,
-        Size=_itemDetailsVm.Size,
-        Colour=_itemDetailsVm.Colour,
-        Price=_itemDetailsVm.Price,
-        Sale=0
+        Size = _itemDetailsVm.Size,
+        Colour = _itemDetailsVm.Colour,
+        Price = _itemDetailsVm.Price,
+        Sale = 0
       };
       await _context.ITEM_DETAILS.AddAsync(_itemDetails);
+      await _context.SaveChangesAsync();
+      return Ok();
+    }
+    [Authorize(Roles = "Admin, User")]
+    [HttpPut("Activate_Item")]
+    public async Task<ActionResult> ActivateItem(long item_Id)
+    {
+      var user = await _user.FindByNameAsync(User.Identity.Name);
+      var item = await _context.ITEMS.Where(o => o.Id == item_Id).FirstOrDefaultAsync();
+      if (item == null)
+      {
+        return Unauthorized("there's no item mannn");
+      }
+      else if (item.Company_Id != user.Company_Id)
+      {
+        return Unauthorized();
+      }
+      else if (item.Is_Active == 1)
+      {
+        return BadRequest("Already Active");
+      }
+      var item_Details = await _context.ITEM_DETAILS.Where(o => o.Item_Id == item_Id).FirstOrDefaultAsync();
+      if (item_Details == null)
+      {
+        return BadRequest("Can't activate an item, cos there's no details");
+      }
+      item.Is_Active = 1;
+      await _context.SaveChangesAsync();
+      return Ok();
+    }
+    [Authorize(Roles = "Admin, User")]
+    [HttpPut("Deactivate_Item")]
+    public async Task<ActionResult> DeactivateItem(long item_Id)
+    {
+      var user = await _user.FindByNameAsync(User.Identity.Name);
+      var item = await _context.ITEMS.Where(o => o.Id == item_Id).FirstOrDefaultAsync();
+      if (item == null)
+      {
+        return Unauthorized("there's no item mannn");
+      }
+      else if (item.Company_Id != user.Company_Id)
+      {
+        return Unauthorized();
+      }
+      else if (item.Is_Active == 0)
+      {
+        return BadRequest("Already Deactived");
+      }
+      var item_Details = await _context.ITEM_DETAILS.Where(o => o.Item_Id == item_Id).FirstOrDefaultAsync();
+      if (item_Details == null)
+      {
+        return BadRequest("Can't activate an item, cos there's no details");
+      }
+      item.Is_Active = 0;
       await _context.SaveChangesAsync();
       return Ok();
     }

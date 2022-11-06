@@ -30,10 +30,11 @@ namespace EStore.Data
       builder.Entity<item>().HasOne<category>(i => i.category).WithMany(o => o.item).HasForeignKey(o => o.Category_Id);
       builder.Entity<user>().HasOne<company>(o => o.company).WithMany(o => o.users).HasForeignKey(o => o.Company_Id);
       base.OnModelCreating(builder);
-     /* builder.Entity<IdentityRole>().HasData(
-        new IdentityRole { Name = "User", NormalizedName = "USER" },
-        new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" }
-      );*/
+      /* builder.Entity<IdentityRole>().HasData(
+           new IdentityRole { Name = "User", NormalizedName = "USER" },
+           new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
+           new IdentityRole { Name = "Peasant", NormalizedName = "PEASANT" }
+       );*/
       builder.Entity<user>().Property(u => u.User_Id).Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
     }
   }

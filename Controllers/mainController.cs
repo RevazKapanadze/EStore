@@ -33,35 +33,58 @@ namespace EStore.Controllers
       };
       return await _query.ToListAsync(); ;
     }
-    [HttpGet("Get_All_Items/{company_Id}")]
-    public async Task<ActionResult<List<item>>> Get_All_Items(int company_Id)
+    [HttpGet("Get_All_Items/{company_Id}/{orderBy}")]
+    public async Task<ActionResult<List<item>>> Get_All_Items(int company_Id, string orderBy, [FromQuery] List<string> orderSize)
     {
-      var _items = await _context.ITEMS.Where(o => o.Company_Id == company_Id && o.Is_Active == 1 && o.Quantity!=0).OrderByDescending(o=>o.Id).ToListAsync();
-  
-      var item2 = await _context.ITEM_DETAILS.Where(o => _items.Select(o => o.Id).ToList().Contains(o.Item_Id)).ToListAsync();
-     
+      var _query = _context.ITEMS.Where(o => o.Company_Id == company_Id && o.Is_Active == 1 && o.Quantity != 0).AsQueryable();
+      _query = orderBy switch
+      {
+        "price" => _query.OrderBy(o => o.Price),
+        "priceDesc" => _query.OrderBy(o => o.Price),
+        _ => _query
+      };
+      var _items = await _query.OrderByDescending(p => p.Id).ToListAsync();
+      var _query2 = _context.ITEM_DETAILS.Where(o => _items.Select(o => o.Id).ToList().Contains(o.Item_Id)).AsQueryable();
+      _query2 = orderSize[0] switch
+      {
+        "0" => _query2,
+        _ => _query2.Where(o => orderSize.Contains(o.Size))
+      };
+      var item2 = await _query2.ToListAsync();
+
       if (item2 == null)
       {
         return BadRequest("nothing in item details");
       }
-            var _itemVm = _items.
-                Where(o=> item2.Select(o => o.Item_Id).ToList().Contains(o.Id)).
-                Select(o => new
-            {
-                o.Id,
-                o.Short_Name,
-                o.Short_Description,
-                o.Price,
-                o.Quantity,
-                o.Main_Category,
-                o.Is_Active,
-                o.Main_Photo,
-                o.Company_Id,
-                o.Category_Id
-            }).ToList();
-
+      var _itemVm = _items.
+          Where(o => item2.Select(o => o.Item_Id).ToList().Contains(o.Id)).
+          Select(o => new
+          {
+            o.Id,
+            o.Short_Name,
+            o.Short_Description,
+            o.Price,
+            o.Quantity,
+            o.Main_Category,
+            o.Is_Active,
+            o.Main_Photo,
+            o.Company_Id,
+            o.Category_Id
+          }).ToList();
       //var _itemDetails = await _context.ITEMS.Where
       return Ok(_itemVm);
+    }
+    [HttpGet("Get_Company_Details/{company_Id}")]
+    public async Task<ActionResult> GetCompanydetails(int company_Id)
+    {
+      var _company = await _context.COMPANY.Where(o => o.Id == company_Id).Select(o => new { o.Id, o.Company_Logo, o.Details, o.Name }).FirstOrDefaultAsync();
+      return Ok(_company);
+    }
+    [HttpGet("Get_Item_Details/{item_Id}")]
+    public async Task<ActionResult> GetItemDetails(int item_Id)
+    {
+      var _items = await _context.ITEM_DETAILS.Where(o => o.Item_Id == item_Id && o.Quantity > 0).ToListAsync();
+      return Ok(_items);
     }
   }
 }
