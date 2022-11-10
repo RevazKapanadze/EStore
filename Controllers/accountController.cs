@@ -22,7 +22,7 @@ namespace EStore.Controllers
     public async Task<ActionResult<userVm>> Login(loginVm loginvm)
     {
       var user = await _user.FindByNameAsync(loginvm.Username);
-      if (user == null || !await _user.CheckPasswordAsync(user, loginvm.Password))
+      if (user == null || !await _user.CheckPasswordAsync(user, loginvm.Password) || user.IsActive == 0)
         return Unauthorized();
       return new userVm
       {
@@ -49,7 +49,7 @@ namespace EStore.Controllers
         }
         return ValidationProblem();
       }
-      await _user.AddToRoleAsync(user, "User");
+      await _user.AddToRoleAsync(user, "Peasant");
       return StatusCode(201);
     }
     [Authorize]

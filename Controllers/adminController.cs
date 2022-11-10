@@ -21,12 +21,11 @@ namespace EStore.Controllers
   {
     private AppDbContext _context;
     private UserManager<user> _user;
-    private logic _logic;
-    public adminController(AppDbContext context, UserManager<user> user, logic logic)
+
+    public adminController(AppDbContext context, UserManager<user> user)
     {
       _context = context;
       _user = user;
-      _logic = logic;
     }
     [Authorize(Roles = "Admin")]
     [HttpPost("Add_Main_Category")]
@@ -90,10 +89,8 @@ namespace EStore.Controllers
     [HttpPut("Activate_User/{user_Id}")]
     public async Task<ActionResult> ActivateUser(int user_Id)
     {
-
-
-
       var user = await _context.ASPNETUSERS.Where(o => o.User_Id == user_Id).FirstOrDefaultAsync();
+      await _user.AddToRoleAsync(user, "User");
       user.IsActive = 1;
       await _context.SaveChangesAsync();
       return Ok();
@@ -106,6 +103,7 @@ namespace EStore.Controllers
 
       var user = await _context.ASPNETUSERS.Where(o => o.User_Id == user_Id).FirstOrDefaultAsync();
       user.IsActive = 0;
+      await _user.RemoveFromRoleAsync(user, "User");
       await _context.SaveChangesAsync();
       return Ok();
 

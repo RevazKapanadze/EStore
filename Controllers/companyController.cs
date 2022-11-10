@@ -19,12 +19,11 @@ namespace EStore.Controllers
   {
     private AppDbContext _context;
     private UserManager<user> _user;
-    private logic _logic;
-    public companyController(AppDbContext context, UserManager<user> user, logic logic)
+
+    public companyController(AppDbContext context, UserManager<user> user)
     {
       _context = context;
       _user = user;
-      _logic = logic;
     }
     [Authorize(Roles = "Admin, User")]
     [HttpPost("Add_Item")]
