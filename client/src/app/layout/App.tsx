@@ -1,31 +1,26 @@
-
-import { useEffect, useState } from "react";
+import { Container, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { blue, blueGrey, red } from "@mui/material/colors";
 import Catalog from "../../features/catalog/catalog";
-
-import { Item } from "../models/item";
-
+import Header from "./Header";
 
 
-export default function App() {
-  const [resourceType, setResourceType] = useState(1)
-  const [Item, setItems] = useState([])
-  useEffect(() => {
-    fetch(`http://localhost:5000/Get_Item_Details/${resourceType}`)
-      .then(response => response.json())
-      .then(json => setItems(json))
-  }, [resourceType])
+
+function App() {
+  const theme = createTheme({
+    palette: {
+      primary: blue,
+    },
+  });
   return (
-    <>
-      <div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Header />
+      <Container>
         <Catalog />
-        <button onClick={() => setResourceType(1)}>Posts</button>
-      </div>
-      <h1>{resourceType}</h1>
-      {Item.map(item => {
-        return <pre>{JSON.stringify(item)}</pre>
-      })}
-    </>
-  );
+      </Container>
+    </ThemeProvider>
+  )
 }
+export default App;
 
 
