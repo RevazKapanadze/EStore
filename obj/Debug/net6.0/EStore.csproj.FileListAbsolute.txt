@@ -5,8 +5,6 @@ E:\Solution\EStore\EStore\obj\Debug\net6.0\EStore.AssemblyInfo.cs
 E:\Solution\EStore\EStore\obj\Debug\net6.0\EStore.csproj.CoreCompileInputs.cache
 E:\Solution\EStore\EStore\obj\Debug\net6.0\EStore.MvcApplicationPartsAssemblyInfo.cs
 E:\Solution\EStore\EStore\obj\Debug\net6.0\EStore.MvcApplicationPartsAssemblyInfo.cache
-E:\Solution\EStore\EStore\bin\Debug\net6.0\appsettings.Development.json
-E:\Solution\EStore\EStore\bin\Debug\net6.0\appsettings.json
 E:\Solution\EStore\EStore\bin\Debug\net6.0\EStore.exe
 E:\Solution\EStore\EStore\bin\Debug\net6.0\EStore.deps.json
 E:\Solution\EStore\EStore\bin\Debug\net6.0\EStore.runtimeconfig.json
@@ -85,3 +83,6 @@ E:\Solution\EStore\EStore\bin\Debug\net6.0\client\package-lock.json
 E:\Solution\EStore\EStore\bin\Debug\net6.0\client\package.json
 E:\Solution\EStore\EStore\bin\Debug\net6.0\client\public\manifest.json
 E:\Solution\EStore\EStore\bin\Debug\net6.0\client\tsconfig.json
+E:\Solution\EStore\EStore\bin\Debug\net6.0\API\appsettings.Development.json
+E:\Solution\EStore\EStore\bin\Debug\net6.0\API\appsettings.json
+E:\Solution\EStore\EStore\bin\Debug\net6.0\API\Properties\launchSettings.json
