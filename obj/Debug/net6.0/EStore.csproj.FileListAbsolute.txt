@@ -81,3 +81,7 @@ E:\Solution\EStore\EStore\bin\Debug\net6.0\Microsoft.AspNetCore.JsonPatch.dll
 E:\Solution\EStore\EStore\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 E:\Solution\EStore\EStore\bin\Debug\net6.0\Newtonsoft.Json.dll
 E:\Solution\EStore\EStore\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+E:\Solution\EStore\EStore\bin\Debug\net6.0\client\package-lock.json
+E:\Solution\EStore\EStore\bin\Debug\net6.0\client\package.json
+E:\Solution\EStore\EStore\bin\Debug\net6.0\client\public\manifest.json
+E:\Solution\EStore\EStore\bin\Debug\net6.0\client\tsconfig.json
