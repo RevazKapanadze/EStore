@@ -12,6 +12,5 @@ namespace EStore.API.Data.Models
     public string Company_Logo { get; set; }
     public ICollection<item> items { get; set; }
     public ICollection<user> users { get; set; }
-
   }
 }

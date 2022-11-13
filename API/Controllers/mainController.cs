@@ -136,5 +136,23 @@ namespace EStore.Controllers
       }).ToListAsync();
       return Ok(items);
     }
+    [HttpGet("Get_Item_By_Id/{Item_Id}")]
+    public async Task<ActionResult> Get_Item_By_Id(int Item_Id)
+    {
+      var items = await _context.ITEMS.Select(o => new
+      {
+        o.Id,
+        o.Short_Name,
+        o.Short_Description,
+        o.Price,
+        o.Quantity,
+        o.Main_Category,
+        o.Is_Active,
+        o.Main_Photo,
+        o.Category_Id,
+        o.Company_Id
+      }).Where(o => o.Id == Item_Id).FirstOrDefaultAsync();
+      return Ok(items);
+    }
   }
 }

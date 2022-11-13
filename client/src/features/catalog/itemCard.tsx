@@ -1,14 +1,16 @@
 import { ListItem, ListItemAvatar, Avatar, ListItemText, Button, Card, CardActions, CardContent, CardMedia, Typography, CardHeader } from "@mui/material";
+import { Link, useParams } from "react-router-dom";
 import { Item } from "../../app/models/item";
 
 interface Props {
   item: Item;
 }
 export default function ItemCard({ item }: Props) {
+  const { company_id } = useParams<{ company_id: string }>();
   return (
     <Card>
       <CardMedia
-        sx={{ height: 140, backgroundSize: 'contain', bgcolor: 'primary.light' }}
+        sx={{ height: 140, backgroundSize: 'contain', bgcolor: 'white' }}
         image={item.main_Photo}
         title={item.short_Description}
       />
@@ -21,7 +23,7 @@ export default function ItemCard({ item }: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" > დეტალები</Button>
+        <Button component={Link} to={`/${company_id}/catalog/${item.id}`} size="small" > დეტალები</Button>
       </CardActions>
     </Card >
   )
