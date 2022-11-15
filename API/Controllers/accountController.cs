@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-
+using API.Controllers;
 namespace EStore.Controllers
 {
-  public class accountController : ControllerBase
+  public class accountController : baseApiContoller
   {
     private readonly UserManager<user> _user;
     private readonly tokenService _token;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using API.Middleware;
 using EStore.API.Data;
 using EStore.API.Data.Models;
 using EStore.API.Data.Services;
@@ -95,9 +96,10 @@ options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoop
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+      app.UseMiddleware<ExceptionMiddleware>();
       if (env.IsDevelopment())
       {
-        app.UseDeveloperExceptionPage();
+
         app.UseSwagger();
         app.UseSwaggerUI(c =>
         {

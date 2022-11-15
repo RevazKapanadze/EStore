@@ -7,11 +7,12 @@ using EStore.API.Data.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using API.Controllers;
 
 namespace EStore.Controllers
 {
   [ApiController]
-  public class mainController : ControllerBase
+  public class mainController : baseApiContoller
   {
 
     private AppDbContext _context;

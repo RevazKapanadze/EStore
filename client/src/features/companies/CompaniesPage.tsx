@@ -5,18 +5,19 @@ import { List, ListItemAvatar, ListItem, Avatar, ListItemText } from "@mui/mater
 import axios from "axios";
 import { Item } from "../../app/models/item";
 import CompaniesList from "./CompaniesList";
+import agent from "../../app/api/agent";
 
 
 export default function CompaniesPage() {
   const [company, setCompany] = useState<Company[]>([])
   useEffect(() => {
-    axios.get('http://localhost:5000/Get_All_Companies')
-      .then(response => setCompany(response.data))
+    agent.main.Get_All_Companies()
+      .then(response => setCompany(response))
       .catch(error => console.log(error))
   }, [])
 
   return (
-    <Container sx={{ paddingTop: 6}}>
+    <Container sx={{ paddingTop: 6 }}>
       <CompaniesList companies={company} />
     </Container>
   )

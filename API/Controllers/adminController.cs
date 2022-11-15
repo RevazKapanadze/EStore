@@ -13,11 +13,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.Extensions.Logging;
+using API.Controllers;
 
 namespace EStore.Controllers
 {
   [ApiController]
-  public class adminController : ControllerBase
+  public class adminController : baseApiContoller
   {
     private AppDbContext _context;
     private UserManager<user> _user;

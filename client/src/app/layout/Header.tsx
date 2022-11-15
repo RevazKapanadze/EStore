@@ -2,7 +2,8 @@ import { ShoppingCart } from "@mui/icons-material";
 import { AppBar, ListItem, Toolbar, Typography, List, Badge, IconButton, Box, Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, Outlet, useParams } from "react-router-dom";
+import agent from "../api/agent";
 import { Company } from "../models/company";
 const midLinks = [
   { title: 'კომპანიის შესახებ', path: `/${1}/about` }
@@ -28,8 +29,8 @@ export default function Header() {
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    axios.get(`http://localhost:5000/Get_Company_Details/${company_id}`)
-      .then(response => setCompany(response.data))
+    agent.main.Get_Company_Details(parseInt(company_id!))
+      .then(response => setCompany(response))
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
   }, [company_id]
@@ -37,9 +38,8 @@ export default function Header() {
   if (loading) return <h3> იტვირთება</h3>
   if (!company) return <h3> კომპანია არ მოიძებნა </h3>
   return (
-    <AppBar position='static' sx={{ mb: 4, bgcolor: 'white' }}>
+    <><AppBar position='static' sx={{ mb: 4, bgcolor: 'white' }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-
         <Box sx={{ display: 'flex' }}>
           <Typography variant='h6' color="black" align="center" component={NavLink}
             to={`/${company_id}/about`}
@@ -78,6 +78,7 @@ export default function Header() {
           </List>
         </Box>
       </Toolbar>
-    </AppBar >
+    </AppBar><Outlet /></>
+
   )
 }

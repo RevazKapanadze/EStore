@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import { idText } from "typescript";
+import agent from "../../app/api/agent";
 import Header from "../../app/layout/Header";
 import { Item } from "../../app/models/item";
 import { ItemDetails } from "../../app/models/itemDetails";
@@ -13,15 +14,15 @@ export default function ItemDetailsPage() {
   const [itemDetails, setItemDetails] = useState<ItemDetails[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    axios.get(`http://localhost:5000/Get_Item_Details/${id}`)
-      .then(response => setItemDetails(response.data))
+    agent.main.Get_Item_Details(parseInt(id!))
+      .then(response => setItemDetails(response))
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
   }, [id]
   )
   useEffect(() => {
-    axios.get(`http://localhost:5000/Get_Item_By_Id/${id}`)
-      .then(response => setItem(response.data))
+    agent.main.Get_Item_By_Id(parseInt(id!))
+      .then(response => setItem(response))
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
   }, [id]
@@ -32,7 +33,7 @@ export default function ItemDetailsPage() {
   if (loading) return <h3> იტვირთება</h3>
   if (!item) return <h3> პროდუქტი არ მოიძებნა </h3>
   return (
-    <><Header /><Container>
+    <><Container>
       <Typography variant='h2'>
         <Grid container spacing={6}>
           <Grid item xs={6}>

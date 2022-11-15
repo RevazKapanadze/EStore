@@ -12,10 +12,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using API.Controllers;
+
 namespace EStore.Controllers
 {
   [ApiController]
-  public class companyController : ControllerBase
+  public class companyController : baseApiContoller
   {
     private AppDbContext _context;
     private UserManager<user> _user;
