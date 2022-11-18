@@ -9,7 +9,7 @@ interface Props {
 
 export default function CompaniesCard({ company }: Props) {
   return (
-    <Card component={Link} to={`/${company.id}/catalog`} style={{ textDecoration: 'none' }}>
+    <Card component={Link} to={`/${company.id}`} style={{ textDecoration: 'none' }}>
       <CardMedia
         sx={{ height: 140, backgroundSize: 'contain', bgcolor: 'primary.light' }}
         image={company.company_Logo}

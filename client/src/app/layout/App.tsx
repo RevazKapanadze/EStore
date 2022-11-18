@@ -10,6 +10,8 @@ import HomePage from "../../features/home/HomePage";
 import Header from "./Header";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ServerError from "../errors/serverError";
+import NotFound from "../errors/notFound";
 
 
 function App() {
@@ -20,20 +22,20 @@ function App() {
   });
 
   return (
-
     <ThemeProvider theme={theme}>
       <ToastContainer position='bottom-right' hideProgressBar />
       <CssBaseline />
       <Routes>
         <Route path='/:company_id' element={<Header />}>
-          <Route path='catalog' element={<Catalog />}> </Route>
-          <Route path='catalog/:id' element={<ItemDetails />}></Route>
+          <Route path='' element={<Catalog />}> </Route>
+          <Route path=':id' element={<ItemDetails />}></Route>
           <Route path='about' element={<AboutPage />}></Route>
+          <Route element={<NotFound/>} />
         </Route>
         <Route path='' element={<CompaniesPage />}> </Route>
         <Route path='/homepage' element={<HomePage />}> </Route>
+        <Route path='/server-error' element={<ServerError />}> </Route>
       </Routes>
-
     </ThemeProvider >
 
   )

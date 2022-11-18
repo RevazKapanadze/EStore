@@ -16,6 +16,7 @@ namespace EStore.API.Data.Models
     public int Main_Category { get; set; }
     public int Is_Active { get; set; }
     public string Main_Photo { get; set; }
+
     //navigation
     public int Category_Id { get; set; }
     public category category { get; set; }

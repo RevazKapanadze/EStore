@@ -1,24 +1,40 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { request } from "http";
 import { toast } from "react-toastify";
-
+import { history } from "../..";
+const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 axios.defaults.baseURL = 'http://localhost:5000/api/';
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-axios.interceptors.response.use(response => {
+axios.interceptors.response.use(async response => {
+  await sleep();
   return response
 }, (error: AxiosError) => {
   const { data, status } = error.response as any;
   switch (status) {
     case 400:
+      if (data.errors) {
+        const modelStateErrors: string[] = [];
+        for (const key in data.errors) {
+          if (data.errors[key]) {
+            modelStateErrors.push(data.errors[key])
+          }
+        }
+        throw modelStateErrors.flat();
+      }
       toast.error(data.title);
       break;
     case 401:
       toast.error(data.title);
       break;
     case 500:
-      toast.error(data.title);
+      history.push(
+        {
+          pathname: '/server-error',
+          state: { error: data }
+        }
+      );
       break;
     default:
       break;
@@ -34,7 +50,7 @@ const requests = {
 const main = {
   Get_Item_By_Id: (id: number) => requests.get(`main/Get_Item_By_Id/${id}`),
   Get_Item_Details: (id: number) => requests.get(`main/Get_Item_Details/${id}`),
-  Get_All_Items: (company_id: number) => requests.get(`main/Get_All_Items/${company_id}/_?orderSize=M&orderSize=41`),
+  Get_All_Items: (company_id: number) => requests.get(`main/Get_All_Items/${company_id}?orderSize=M&orderSize=41`),
   Get_All_Companies: () => requests.get("main/Get_All_Companies/"),
   Get_Company_Details: (company_id: number) => requests.get(`main/Get_Company_Details/${company_id}`)
 }

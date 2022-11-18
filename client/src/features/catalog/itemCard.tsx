@@ -23,7 +23,7 @@ export default function ItemCard({ item }: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button component={Link} to={`/${company_id}/catalog/${item.id}`} size="small" > დეტალები</Button>
+        <Button component={Link} to={`/${company_id}/${item.id}`} size="small" > დეტალები</Button>
       </CardActions>
     </Card >
   )

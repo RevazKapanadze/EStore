@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import agent from "../../app/api/agent";
 import Header from "../../app/layout/Header";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Item } from "../../app/models/item";
 import ItemList from "./itemList";
 
@@ -17,7 +18,7 @@ export default function Catalog() {
       .catch(error => console.log(error))
       .finally(() => setLoading(false))
   }, [company_id])
-  if (loading) return <h3> იტვირთება</h3>
+  if (loading) return <LoadingComponent message="პროდუქტები იტვირთება" />
   if (!items) return <h3> პროდუქტი არ მოიძებნა</h3>
   return (
     <>

@@ -1,14 +1,14 @@
-import { Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
-import axios from "axios";
+import { Container, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
-import { idText } from "typescript";
 import agent from "../../app/api/agent";
-import Header from "../../app/layout/Header";
+import NotFound from "../../app/errors/notFound";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Item } from "../../app/models/item";
 import { ItemDetails } from "../../app/models/itemDetails";
 
 export default function ItemDetailsPage() {
+
   const { id } = useParams<{ id: string }>();
   const [item, setItem] = useState<Item | null>(null);
   const [itemDetails, setItemDetails] = useState<ItemDetails[]>([]);
@@ -30,8 +30,8 @@ export default function ItemDetailsPage() {
   const uniqueSize = [...new Set(itemDetails.map(itemdetail => itemdetail.size + "  "))];
   const uniqueColuor = [...new Set(itemDetails.map(itemdetail => itemdetail.colour))];
 
-  if (loading) return <h3> იტვირთება</h3>
-  if (!item) return <h3> პროდუქტი არ მოიძებნა </h3>
+  if (loading) return <LoadingComponent message="პროდუქტი იტვირთება" />
+  if (!item) return <h3> <NotFound /> </h3>
   return (
     <><Container>
       <Typography variant='h2'>

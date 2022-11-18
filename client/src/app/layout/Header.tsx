@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { NavLink, Outlet, useParams } from "react-router-dom";
 import agent from "../api/agent";
 import { Company } from "../models/company";
+import LoadingComponent from "./LoadingComponent";
 const midLinks = [
   { title: 'კომპანიის შესახებ', path: `/${1}/about` }
 
@@ -35,7 +36,7 @@ export default function Header() {
       .finally(() => setLoading(false));
   }, [company_id]
   )
-  if (loading) return <h3> იტვირთება</h3>
+  if (loading) return <LoadingComponent message="პროდუქტები იტვირთება" />
   if (!company) return <h3> კომპანია არ მოიძებნა </h3>
   return (
     <><AppBar position='static' sx={{ mb: 4, bgcolor: 'white' }}>
@@ -52,7 +53,7 @@ export default function Header() {
         </Box>
         <Box display='flex' alignItems='center'>
           <Typography variant='h6' color="black" align="center" component={NavLink}
-            to={`/${company_id}/catalog`}
+            to={`/${company_id}`}
             end
             sx={navStyles}
             style={{ textDecoration: 'none' }}
