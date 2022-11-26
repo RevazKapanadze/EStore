@@ -48,11 +48,12 @@ const requests = {
   delete: (url: string) => axios.delete(url).then(responseBody)
 }
 const main = {
-  Get_Item_By_Id: (id: number) => requests.get(`main/Get_Item_By_Id/${id}`),
+  Get_Item_By_Id: (id: number, company_id: number) => requests.get(`main/Get_Item_By_Id/${id}/${company_id}`),
   Get_Item_Details: (id: number) => requests.get(`main/Get_Item_Details/${id}`),
-  Get_All_Items: (company_id: number) => requests.get(`main/Get_All_Items/${company_id}?orderSize=M&orderSize=41`),
+  Get_All_Items: (company_id: number) => requests.get(`main/Get_All_Items?Company_Id=${company_id}`),
   Get_All_Companies: () => requests.get("main/Get_All_Companies/"),
-  Get_Company_Details: (company_id: number) => requests.get(`main/Get_Company_Details/${company_id}`)
+  Get_Company_Details: (company_id: number) => requests.get(`main/Get_Company_Details/${company_id}`),
+  Get_Company_Unique_Filters: (company_id: number) => requests.get(`main/Get_Company_Unique_Filters/${company_id}`)
 }
 
 const TestErrors = {

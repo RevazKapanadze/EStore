@@ -51,7 +51,24 @@ namespace EStore.Controllers
       Response.AddPaginationHeader(items.MetaData);
       return items;
     }
-
+    [HttpGet("Get_Item_By_Id/{Item_Id}/{Company_Id}")]
+    public async Task<ActionResult> Get_Item_By_Id(int Item_Id, int Company_Id)
+    {
+      var items = await _context.ITEMS.Select(o => new
+      {
+        o.Id,
+        o.Short_Name,
+        o.Short_Description,
+        o.Price,
+        o.Quantity,
+        o.Main_Category,
+        o.Is_Active,
+        o.Main_Photo,
+        o.Category_Id,
+        o.Company_Id
+      }).Where(o => o.Id == Item_Id && o.Company_Id == Company_Id).FirstOrDefaultAsync();
+      return Ok(items);
+    }
 
     [HttpGet("Get_Company_Details/{company_Id}")]
     public async Task<ActionResult> GetCompanydetails(int company_Id)

@@ -13,6 +13,5 @@ namespace EStore.API.Data.Models
     public int IsActive { get; set; }
     public int Company_Id { get; set; }
     public company company { get; set; }
-
   }
 }

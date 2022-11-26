@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using EStore.API.Data.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
+using Microsoft.Extensions.Hosting;
 
 namespace EStore.API.Data
 {
@@ -15,6 +16,7 @@ namespace EStore.API.Data
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     public virtual DbSet<item> ITEMS { get; set; }
+    public virtual DbSet<basket> BASKETS { get; set; }
     public virtual DbSet<mainCategory> MAINCATEGORY { get; set; }
     public virtual DbSet<category> CATEGORY { get; set; }
     public virtual DbSet<item_Details> ITEM_DETAILS { get; set; }
@@ -29,6 +31,8 @@ namespace EStore.API.Data
       builder.Entity<category>().HasOne<mainCategory>(o => o.mainCategory).WithMany(g => g.category).HasForeignKey(s => s.mainCategory_Id);
       builder.Entity<item>().HasOne<category>(i => i.category).WithMany(o => o.item).HasForeignKey(o => o.Category_Id);
       builder.Entity<user>().HasOne<company>(o => o.company).WithMany(o => o.users).HasForeignKey(o => o.Company_Id);
+     // builder.Entity<basketItem>().HasOne<basket>(o => o.Basket).WithMany(o => o.Items).HasForeignKey(o => o.BasketId);
+     // builder.Entity<basketItem>().HasOne<item>(o=>o.Product).WithMany(o=> o.basketItems).HasForeignKey(o=> o.ProductId);
       base.OnModelCreating(builder);
       /* builder.Entity<IdentityRole>().HasData(
            new IdentityRole { Name = "User", NormalizedName = "USER" },

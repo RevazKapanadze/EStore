@@ -8,6 +8,7 @@ import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Item } from "../../app/models/item";
 import ItemList from "./itemList";
 
+
 export default function Catalog() {
   const { company_id } = useParams<{ company_id: string }>();
   const [items, setProducts] = useState<Item[]>([]);

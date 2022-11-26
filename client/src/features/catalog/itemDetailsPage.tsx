@@ -1,4 +1,4 @@
-import { Container, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
+import { Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import agent from "../../app/api/agent";
@@ -8,7 +8,7 @@ import { Item } from "../../app/models/item";
 import { ItemDetails } from "../../app/models/itemDetails";
 
 export default function ItemDetailsPage() {
-
+  const { company_id } = useParams<{ company_id: string }>();
   const { id } = useParams<{ id: string }>();
   const [item, setItem] = useState<Item | null>(null);
   const [itemDetails, setItemDetails] = useState<ItemDetails[]>([]);
@@ -21,7 +21,7 @@ export default function ItemDetailsPage() {
   }, [id]
   )
   useEffect(() => {
-    agent.main.Get_Item_By_Id(parseInt(id!))
+    agent.main.Get_Item_By_Id(parseInt(id!), parseInt(company_id!))
       .then(response => setItem(response))
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
@@ -34,13 +34,16 @@ export default function ItemDetailsPage() {
   if (!item) return <h3> <NotFound /> </h3>
   return (
     <><Container>
+
+
       <Typography variant='h2'>
-        <Grid container spacing={6}>
-          <Grid item xs={6}>
+        <Grid container spacing={10} sx={{ width: '100%' }}>
+          <Grid item xs={6} >
             <img src={item.main_Photo} alt={item.short_Name} style={{ width: '100%' }} />
           </Grid>
-          <Grid item xs={6}>
-            <Typography variant='h3' align='center'>{item.short_Name} </Typography>
+          <Grid item xs={6} >
+            <Typography variant='h3' align='center' paddingBottom={10}>{item.short_Name} </Typography>
+            <Divider />
             <TableContainer>
               <Table>
                 <TableBody>

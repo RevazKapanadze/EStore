@@ -22,6 +22,7 @@ namespace EStore.API.Data.Models
     public category category { get; set; }
     public int Company_Id { get; set; }
     public company Company { get; set; }
+     public ICollection<basketItem> basketItems { get; set; }
     public ICollection<item_Photoes> item_Photoes { get; set; }
     public ICollection<item_Details> item_Details { get; set; }
   }
