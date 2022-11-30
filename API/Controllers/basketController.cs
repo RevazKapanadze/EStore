@@ -18,17 +18,18 @@ namespace API.Controllers
     {
       _context = context;
     }
-    [HttpGet(Name = "GetBasket")]
+    [HttpGet("GetBasket")]
     public async Task<ActionResult<basketVM>> GetBasket()
     {
       var basket = await Retrievebasket();
 
       if (basket == null) return NotFound();
 
-      return MapbasketToDto(basket);
+      return MapbasketToVM(basket);
     }
 
-    [HttpPost]
+    [HttpPost("AddItemTobasket")]
+
     public async Task<ActionResult<basketVM>> AddItemTobasket(long productId, int quantity)
     {
       var basket = await Retrievebasket();
@@ -43,12 +44,12 @@ namespace API.Controllers
 
       var result = await _context.SaveChangesAsync() > 0;
 
-      if (result) return CreatedAtRoute("Getbasket", MapbasketToDto(basket));
+      if (result) return CreatedAtAction("Getbasket", MapbasketToVM(basket));
 
       return BadRequest(new ProblemDetails { Title = "Problem saving item to basket" });
     }
 
-    [HttpDelete]
+    [HttpDelete("RemovebasketItem")]
     public async Task<ActionResult> RemovebasketItem(int productId, int quantity)
     {
       var basket = await Retrievebasket();
@@ -82,7 +83,7 @@ namespace API.Controllers
       return basket;
     }
 
-    private basketVM MapbasketToDto(basket basket)
+    private basketVM MapbasketToVM(basket basket)
     {
       return new basketVM
       {

@@ -1,15 +1,13 @@
 import { ShoppingCart } from "@mui/icons-material";
-import { AppBar, ListItem, Toolbar, Typography, List, Badge, IconButton, Box, Button } from "@mui/material";
-import axios from "axios";
+import { AppBar, ListItem, Toolbar, Typography, List, Badge, IconButton, Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { Link, NavLink, Outlet, useParams } from "react-router-dom";
 import agent from "../api/agent";
+import { useStoreContext } from "../context/storeContext";
 import { Company } from "../models/company";
 import LoadingComponent from "./LoadingComponent";
-const midLinks = [
-  { title: 'კომპანიის შესახებ', path: `/${1}/about` }
 
-]
+
 const rightLinks = [
   { title: 'login', path: '/login' },
   { title: 'register', path: '/register' }
@@ -26,6 +24,8 @@ const navStyles = {
 }
 
 export default function Header() {
+  const { basket } = useStoreContext();
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
   const { company_id } = useParams<{ company_id: string }>();
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,6 +36,8 @@ export default function Header() {
       .finally(() => setLoading(false));
   }, [company_id]
   )
+  //const { basket } = useStoreContext();
+  // const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
   if (loading) return <LoadingComponent message="პროდუქტები იტვირთება" />
   if (!company) return <h3> კომპანია არ მოიძებნა </h3>
   return (
@@ -61,8 +63,8 @@ export default function Header() {
           </Typography>
         </Box>
         <Box display='flex' alignItems='center'>
-          <IconButton size='large' sx={navStyles}>
-            <Badge badgeContent={4} color='secondary'>
+          <IconButton component={Link} to={`/${company_id}/basket`} size='large' sx={navStyles}>
+            <Badge badgeContent={itemCount} color='secondary'>
               <ShoppingCart />
             </Badge>
           </IconButton>

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { history } from "../..";
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 axios.defaults.baseURL = 'http://localhost:5000/api/';
+axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -55,6 +56,11 @@ const main = {
   Get_Company_Details: (company_id: number) => requests.get(`main/Get_Company_Details/${company_id}`),
   Get_Company_Unique_Filters: (company_id: number) => requests.get(`main/Get_Company_Unique_Filters/${company_id}`)
 }
+const basket = {
+  GetBasket: () => requests.get('basket/GetBasket'),
+  addItemTobasket: (productId: number, quantity = 1) => requests.post(`basket/AddItemTobasket?productId=${productId}&quantity=${quantity}`, {}),
+  removeItem: (productId: number, quantity = 1) => requests.delete(`basket/RemovebasketItem?productId=${productId}&quantity=${quantity}`)
+}
 
 const TestErrors = {
   get400error: () => requests.get(`buggy/bad-request`),
@@ -65,7 +71,8 @@ const TestErrors = {
 }
 const agent = {
   main,
-  TestErrors
+  TestErrors,
+  basket
 }
 
 export default agent;

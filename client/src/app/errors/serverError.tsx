@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 
 export default function ServerErrors() {
+  
   const Navigate = useNavigate();
   const { state } = useLocation();
   return (

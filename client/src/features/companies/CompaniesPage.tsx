@@ -15,6 +15,7 @@ export default function CompaniesPage() {
       .then(response => setCompany(response))
       .catch(error => console.log(error))
   }, [])
+  
 
   return (
     <Container sx={{ paddingTop: 6 }}>
