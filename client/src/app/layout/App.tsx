@@ -13,30 +13,36 @@ import 'react-toastify/dist/ReactToastify.css';
 import ServerError from "../errors/serverError";
 import NotFound from "../errors/notFound";
 import BasketPage from "../../features/basket/basketPage";
-import { useStoreContext } from "../context/storeContext";
-import { useEffect, useState } from "react";
-import agent from "../api/agent";
-import { getCookie } from "../util/util";
+import { useCallback, useEffect, useState } from "react";
 import LoadingComponent from "./LoadingComponent";
 import CheckoutPage from "../../features/checkout/checkoutPage";
+import Login from "../../features/account/login";
+import Register from "../../features/account/register";
+import { useAppDispatch } from "../store/configureStore";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
+import { fetchBasketAsync } from "../../features/basket/basketSlice";
+import { PrivateRoute } from "./PrivateRoute";
+
 
 
 function App() {
-
-  const { setBasket } = useStoreContext();
+  const dispatch = useAppDispatch();
+  
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const buyerId = getCookie('buyerId');
-    if (buyerId) {
-      agent.basket.GetBasket()
-        .then(basket => setBasket(basket))
-        .catch(error => console.log(error))
-        .finally(() => setLoading(false))
-    } else {
-      setLoading(false);
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+      await dispatch(fetchBasketAsync());
+    } catch (error) {
+      console.log(error);
     }
-  }, [setBasket])
+  }, [dispatch])
+  useEffect(() => {
+    initApp().then(() => setLoading(false));
+  }, [initApp])
+
+ 
   if (loading) return <LoadingComponent message='Initialising app...' />
 
   const theme = createTheme({
@@ -57,12 +63,18 @@ function App() {
           <Route path='about' element={<AboutPage />}></Route>
           <Route element={<NotFound />} />
           <Route path='basket' element={<BasketPage />}> </Route>
-          <Route path='checkout' element={<CheckoutPage />}></Route>
+
+          <Route path='login' element={<Login />}></Route>
+          <Route path='register' element={<Register />}></Route>
+          <Route element={<PrivateRoute />}>
+            <Route path="checkout" element={<CheckoutPage />} />
+          </Route>
         </Route>
         <Route path='' element={<CompaniesPage />}> </Route>
         <Route path='/homepage' element={<HomePage />}> </Route>
         <Route path='/server-error' element={<ServerError />}> </Route>
       </Routes>
+
     </ThemeProvider >
   )
 }

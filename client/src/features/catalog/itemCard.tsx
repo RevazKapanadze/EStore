@@ -5,15 +5,17 @@ import { Item } from "../../app/models/item";
 import { useState, useEffect } from "react";
 import { LoadingButton } from "@mui/lab";
 import { SettingsBackupRestoreTwoTone } from "@mui/icons-material";
-import { useStoreContext } from "../../app/context/storeContext";
+
+import { useAppSelector } from "../../app/store/configureStore";
+import { setBasket } from "../basket/basketSlice";
 
 interface Props {
   item: Item;
 }
 export default function ItemCard({ item }: Props) {
   const { company_id } = useParams<{ company_id: string }>();
-  const { setBasket } = useStoreContext();
 
+  const { basket } = useAppSelector(state => state.basket);
   const [loading, setLoading] = useState(false);
   function handleAddItem(productId: number) {
     setLoading(true);

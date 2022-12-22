@@ -1,17 +1,18 @@
 import { Add, Delete, Remove } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { Box, Button, Container, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Button, Container, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { useState } from "react";
 import agent from "../../app/api/agent";
-import { useStoreContext } from "../../app/context/storeContext";
-import LoadingComponent from "../../app/layout/LoadingComponent";
-import { Basket } from "../../app/models/basket";
+
 import BasketSummary from "./basketSummary";
 import { Link, useParams } from "react-router-dom";
+import { useAppSelector } from "../../app/store/configureStore";
+import { clearBasket, removeBasketItemAsync, setBasket } from "./basketSlice";
+import { clear } from "console";
 
 export default function BasketPage() {
   const { company_id } = useParams<{ company_id: string }>();
-  const { basket, setBasket, removeItem } = useStoreContext();
+  const { basket } = useAppSelector(state => state.basket);
   const [status, setStatus] = useState({
     loading: false,
     name: 'name'
@@ -26,7 +27,7 @@ export default function BasketPage() {
   function handleRemoveItem(productId: number, quantity = 1, name: string) {
     setStatus({ loading: true, name });
     agent.basket.removeItem(productId, quantity)
-      .then(() => removeItem(productId, quantity))
+      .then(() => removeBasketItemAsync({ productId, quantity }))
       .catch(error => console.log(error))
       .finally(() => setStatus({ loading: false, name: '' }))
   }

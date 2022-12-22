@@ -3,14 +3,17 @@ import { Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import agent from "../../app/api/agent";
-import { useStoreContext } from "../../app/context/storeContext";
+
 import NotFound from "../../app/errors/notFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Item } from "../../app/models/item";
 import { ItemDetails } from "../../app/models/itemDetails";
+import { useAppSelector } from "../../app/store/configureStore";
+import { clearBasket, removeBasketItemAsync, setBasket } from "../basket/basketSlice";
 
 export default function ItemDetailsPage() {
-  const { basket, setBasket, removeItem } = useStoreContext();
+  const { basket } = useAppSelector(state => state.basket);
+
   const { company_id } = useParams<{ company_id: string }>();
   const { id } = useParams<{ id: string }>();
   const [item, setItem] = useState<Item | null>(null);
@@ -51,7 +54,7 @@ export default function ItemDetailsPage() {
     } else {
       const updatedQuantity = item2.quantity - quantity;
       agent.basket.removeItem(item?.id!, updatedQuantity)
-        .then(() => removeItem(item?.id!, updatedQuantity))
+        .then(() => removeBasketItemAsync({ productId: item?.id!, quantity: updatedQuantity, name: 'rem' }))
         .catch(error => console.log(error))
         .finally(() => setSubmitting(false))
     }

@@ -12,3 +12,4 @@ namespace EStore.API.Data.Models
     public ICollection<category> category { get; set; }
   }
 }
+

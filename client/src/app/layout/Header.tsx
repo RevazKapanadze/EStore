@@ -3,14 +3,16 @@ import { AppBar, ListItem, Toolbar, Typography, List, Badge, IconButton, Box } f
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useParams } from "react-router-dom";
 import agent from "../api/agent";
-import { useStoreContext } from "../context/storeContext";
-import { Company } from "../models/company";
-import LoadingComponent from "./LoadingComponent";
 
+import { Company } from "../models/company";
+import { useAppSelector } from "../store/configureStore";
+import LoadingComponent from "./LoadingComponent";
+import SignedInMenu from "./SignedInMenu";
 
 const rightLinks = [
   { title: 'login', path: '/login' },
-  { title: 'register', path: '/register' }
+  { title: 'register', path: '/register' },
+
 ]
 const navStyles = {
   color: 'black',
@@ -24,8 +26,9 @@ const navStyles = {
 }
 
 export default function Header() {
-  const { basket } = useStoreContext();
-  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+  const { basket } = useAppSelector(state => state.basket);
+  const { user } = useAppSelector(state => state.account);
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
   const { company_id } = useParams<{ company_id: string }>();
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,7 +39,7 @@ export default function Header() {
       .finally(() => setLoading(false));
   }, [company_id]
   )
-  //const { basket } = useStoreContext();
+  
   // const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
   if (loading) return <LoadingComponent message="პროდუქტები იტვირთება" />
   if (!company) return <h3> კომპანია არ მოიძებნა </h3>
@@ -67,18 +70,15 @@ export default function Header() {
             <Badge badgeContent={itemCount} color='secondary'>
               <ShoppingCart />
             </Badge>
-          </IconButton>
-          <List sx={{ display: 'flex' }}>
-            {rightLinks.map(({ title, path }) => (
-              <ListItem component={NavLink}
-                to={path}
-                end
-                key={path}
-                sx={navStyles}>
-                {title.toUpperCase()}
-              </ListItem>
-            ))}
-          </List>
+          </IconButton >
+          {user ? (
+            <SignedInMenu />
+          ) : (
+            <><IconButton component={Link} to={`/${company_id}/login`} size='large' sx={navStyles}>
+              <Typography variant='h6' color="black" align="center">შესვლა</Typography>
+            </IconButton><IconButton component={Link} to={`/${company_id}/register`} size='large' sx={navStyles}>
+                <Typography variant='h6' color="black" align="center">რეგისტრაცია</Typography>
+              </IconButton></>)}
         </Box>
       </Toolbar>
     </AppBar><Outlet /></>

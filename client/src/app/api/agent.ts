@@ -1,12 +1,21 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { request } from "http";
 import { toast } from "react-toastify";
 import { history } from "../..";
+import { store } from "../store/configureStore";
+
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
-axios.defaults.baseURL = 'http://localhost:5000/api/';
+
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = 'http://localhost:5000/api/';
 
 const responseBody = (response: AxiosResponse) => response.data;
+
+axios.interceptors.request.use(config => {
+  const token = store.getState().account.user?.token;
+  if (token) config.headers!.Authorization = `Bearer ${token}`;
+  return config;
+})
+
 
 axios.interceptors.response.use(async response => {
   await sleep();
@@ -61,6 +70,11 @@ const basket = {
   addItemTobasket: (productId: number, quantity = 1) => requests.post(`basket/AddItemTobasket?productId=${productId}&quantity=${quantity}`, {}),
   removeItem: (productId: number, quantity = 1) => requests.delete(`basket/RemovebasketItem?productId=${productId}&quantity=${quantity}`)
 }
+const account = {
+  login: (values: any) => requests.post('account/login', values),
+  register_User: (values: any) => requests.post('account/register_User', values),
+  get_Current_User: () => requests.get('get_Current_User')
+}
 
 const TestErrors = {
   get400error: () => requests.get(`buggy/bad-request`),
@@ -72,7 +86,8 @@ const TestErrors = {
 const agent = {
   main,
   TestErrors,
-  basket
+  basket,
+  account
 }
 
 export default agent;
