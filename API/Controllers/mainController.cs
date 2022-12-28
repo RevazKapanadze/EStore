@@ -33,15 +33,15 @@ namespace EStore.Controllers
             [FromQuery] ProductParams productParams
         )
         {
-            var sizeList = new List<string>();
+            /*var sizeList = new List<string>();
             var colorList = new List<string>();
             if (!string.IsNullOrEmpty(productParams.size))
                 sizeList.AddRange(productParams.size.ToLower().Split(",").ToList());
             if (!string.IsNullOrEmpty(productParams.color))
-                colorList.AddRange(productParams.color.ToLower().Split(",").ToList());
+                colorList.AddRange(productParams.color.ToLower().Split(",").ToList());*/
             var _query = _context.ITEMS
                 .Where(c => c.Company_Id == productParams.Company_Id && c.Is_Active == 1)
-                .Where(
+                /*.Where(
                     u =>
                         _context.ITEM_DETAILS
                             .Where(
@@ -53,7 +53,7 @@ namespace EStore.Controllers
                             .Select(o => o.Item_Id)
                             .ToList()
                             .Contains(u.Id)
-                )
+                )*/
                 .Sort(productParams.OrderBy)
                 .Search(productParams.SearchTerm)
                 .Filter(productParams.Category_id, productParams.Main_category)

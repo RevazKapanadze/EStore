@@ -10,3 +10,13 @@ export interface Item {
   category_Id: number;
   company_Id: number;
 }
+export interface ItemParams {
+  orderBy: string;
+  searchTerm?: string;
+  main_Category?: string[];
+  category_Id?: string[];
+  color?: string[];
+  size?: string[];
+  pageNumber: number;
+  pageSize: number;
+}

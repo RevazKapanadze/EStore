@@ -64,6 +64,7 @@ namespace EStore.Controllers
         {
             var _newcompany = new company
             {
+                Id=1,
                 Name = _company.Name,
                 Details = _company.Details,
                 Company_Logo = _company.Company_Logo

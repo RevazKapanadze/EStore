@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { history } from "../..";
+import { PaginatedResponse } from "../models/pagination";
 import { store } from "../store/configureStore";
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
@@ -10,15 +11,23 @@ axios.defaults.baseURL = 'http://localhost:5000/api/';
 
 const responseBody = (response: AxiosResponse) => response.data;
 
+
 axios.interceptors.request.use(config => {
   const token = store.getState().account.user?.token;
-  if (token) config.headers!.Authorization = `Bearer ${token}`;
+  config.headers = config.headers ?? {};
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 })
 
 
 axios.interceptors.response.use(async response => {
   await sleep();
+  const pagination = response.headers['pagination'];
+  if (pagination) {
+    response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+    
+    return response;
+  }
   return response
 }, (error: AxiosError) => {
   const { data, status } = error.response as any;
@@ -36,7 +45,7 @@ axios.interceptors.response.use(async response => {
       toast.error(data.title);
       break;
     case 401:
-      toast.error(data.title);
+      toast.error(data.title || 'არაავტორიზებული');
       break;
     case 500:
       history.push(
@@ -52,7 +61,7 @@ axios.interceptors.response.use(async response => {
   return Promise.reject(error.response);
 })
 const requests = {
-  get: (url: string) => axios.get(url).then(responseBody),
+  get: (url: string, params?: URLSearchParams) => axios.get(url, { params }).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody)
@@ -60,7 +69,7 @@ const requests = {
 const main = {
   Get_Item_By_Id: (id: number, company_id: number) => requests.get(`main/Get_Item_By_Id/${id}/${company_id}`),
   Get_Item_Details: (id: number) => requests.get(`main/Get_Item_Details/${id}`),
-  Get_All_Items: (company_id: number) => requests.get(`main/Get_All_Items?Company_Id=${company_id}`),
+  Get_All_Items: (company_id: number, params: URLSearchParams) => requests.get(`main/Get_All_Items?Company_Id=${company_id}`, params),
   Get_All_Companies: () => requests.get("main/Get_All_Companies/"),
   Get_Company_Details: (company_id: number) => requests.get(`main/Get_Company_Details/${company_id}`),
   Get_Company_Unique_Filters: (company_id: number) => requests.get(`main/Get_Company_Unique_Filters/${company_id}`)
@@ -73,7 +82,7 @@ const basket = {
 const account = {
   login: (values: any) => requests.post('account/login', values),
   register_User: (values: any) => requests.post('account/register_User', values),
-  get_Current_User: () => requests.get('get_Current_User')
+  get_Current_User: () => requests.get('account/get_Current_User')
 }
 
 const TestErrors = {

@@ -29,12 +29,10 @@ namespace EStore.Controllers
         public async Task<ActionResult<userVm>> Login(loginVm loginvm)
         {
             var user = await _user.FindByNameAsync(loginvm.Username);
-            if (
-                user == null
-                || !await _user.CheckPasswordAsync(user, loginvm.Password)
-                || user.IsActive == 0
-            )
+            if (user == null || !await _user.CheckPasswordAsync(user, loginvm.Password))
                 return Unauthorized();
+            if (user.IsActive == 0)
+                return Unauthorized("Not An Active User");
             var userBasket = await Retrievebasket(loginvm.Username);
             var anonBasket = await Retrievebasket(Request.Cookies["buyerId"]);
             if (anonBasket != null)
@@ -45,6 +43,7 @@ namespace EStore.Controllers
                 Response.Cookies.Delete("buyerId");
                 await _context.SaveChangesAsync();
             }
+            if (anonBasket == null && userBasket == null) { }
             return new userVm
             {
                 Email = user.Email,

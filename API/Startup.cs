@@ -39,6 +39,7 @@ namespace API
         {
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(ConnectionString));
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
@@ -140,6 +141,7 @@ namespace API
             {
                 endpoints.MapControllers();
             });
+            //DataSeeder.Seed(app);
         }
     }
 }

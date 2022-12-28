@@ -13,9 +13,10 @@ import { useAppDispatch } from '../../app/store/configureStore';
 import { useMemo } from 'react';
 
 
+
 export default function Login() {
   const { company_id } = useParams<{ company_id: string }>();
-  const history = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { register, handleSubmit, formState: { isSubmitting, errors, isValid } } = useForm({
@@ -29,14 +30,14 @@ export default function Login() {
 
     return null;
   }, [location]);
-  async function submitForm(data: FieldValues) {
+  const loginUser = async (data: FieldValues) => {
     try {
       await dispatch(signInUser(data));
-      history(from || `/${company_id}`);
-    } catch (error) {
-      console.log(error);
+      navigate(`/${company_id}`);
+    } catch (err) {
+      console.log("[Login] login user");
     }
-  }
+  };
 
 
   return (
@@ -47,7 +48,7 @@ export default function Login() {
       <Typography component="h1" variant="h5">
         Sign in
       </Typography>
-      <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate sx={{ mt: 1 }}>
+      <Box component="form" onSubmit={handleSubmit(loginUser)} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           fullWidth
@@ -78,13 +79,16 @@ export default function Login() {
         </LoadingButton>
         <Grid container>
           <Grid item>
-            <Link to='/register'>
+            <Link to={`/${company_id}/register`}>
               {"თუ არ ხართ დარეგისტრირებული, დარეგისტრირდით"}
             </Link>
           </Grid>
         </Grid>
+
       </Box>
+      <Typography>user Pa$$W0rd </Typography>
     </Container>
+
   );
 }
 

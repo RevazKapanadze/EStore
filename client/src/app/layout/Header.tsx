@@ -39,8 +39,6 @@ export default function Header() {
       .finally(() => setLoading(false));
   }, [company_id]
   )
-  
-  // const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
   if (loading) return <LoadingComponent message="პროდუქტები იტვირთება" />
   if (!company) return <h3> კომპანია არ მოიძებნა </h3>
   return (

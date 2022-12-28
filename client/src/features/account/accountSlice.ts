@@ -5,7 +5,6 @@ import { history } from "../..";
 import agent from "../../app/api/agent";
 import { User } from "../../app/models/user";
 
-
 interface AccountState {
   user: User | null;
 }
@@ -18,9 +17,9 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
   'account/signInUser',
   async (data, thunkAPI) => {
     try {
-      const userDto = await agent.account.login(data);
-      const { basket, ...user } = userDto;
-      if (basket) thunkAPI.dispatch(basket(basket));
+      const user = await agent.account.login(data);
+
+
       localStorage.setItem('user', JSON.stringify(user));
       return user;
     } catch (error: any) {
@@ -34,9 +33,8 @@ export const fetchCurrentUser = createAsyncThunk<User>(
   async (_, thunkAPI) => {
     thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem('user')!)));
     try {
-      const userDto = await agent.account.get_Current_User();
-      const { basket, ...user } = userDto;
-      if (basket) thunkAPI.dispatch(basket(basket));
+      const user = await agent.account.get_Current_User();
+
       localStorage.setItem('user', JSON.stringify(user));
       return user;
     } catch (error: any) {

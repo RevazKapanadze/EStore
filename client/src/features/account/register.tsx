@@ -6,13 +6,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Paper } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
 import agent from '../../app/api/agent';
 import { toast } from 'react-toastify';
 
 export default function Register() {
+  const { company_id } = useParams<{ company_id: string }>();
+ 
   const history = useNavigate();
   const { register, handleSubmit, setError, formState: { isSubmitting, errors, isValid } } = useForm({
     mode: 'all'
@@ -38,13 +40,13 @@ export default function Register() {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Register
+        რეგისტრაცია
       </Typography>
       <Box component="form"
         onSubmit={handleSubmit((data) =>
           agent.account.register_User(data)
             .then(() => {
-              toast.success('Registration successful - you can now login');
+              toast.success('რეგისტრაცია წარმატებულია');
               history('/login');
             })
             .catch(error => handleApiErrors(error))
@@ -54,40 +56,40 @@ export default function Register() {
         <TextField
           margin="normal"
           fullWidth
-          label="Username"
+          label="მომხმარებლის სახელი"
           autoFocus
           {...register('username', { required: 'Username is required' })}
           error={!!errors.username}
-          /*helperText={errors?.username?.message}*/
+          helperText={errors?.username?.message?.toString()}
         />
         <TextField
           margin="normal"
           fullWidth
-          label="Email address"
+          label="იმეილი"
           {...register('email', {
             required: 'Email is required',
             pattern: {
               value: /^\w+[\w-.]*@\w+((-\w+)|(\w*)).[a-z]{2,3}$/,
-              message: 'Not a valid email address'
+              message: 'არავალიდური იმეილი'
             }
           })}
           error={!!errors.email}
-          /*helperText={errors?.email?.message}*/
+          helperText={errors?.email?.message?.toString()}
         />
         <TextField
           margin="normal"
           fullWidth
-          label="Password"
+          label="პაროლი"
           type="password"
           {...register('password', {
             required: 'Password is required',
             pattern: {
               value: /(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\s).*$/,
-              message: 'Password is not complex enough'
+              message: 'საკმარისად რთული პაროლი არ არის'
             }
           })}
           error={!!errors.password}
-         /* helperText={errors?.password?.message}*/
+        /*helperText={errors?.password?.message.toString()}*/
         />
         <LoadingButton
           disabled={!isValid}
@@ -97,12 +99,12 @@ export default function Register() {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Register
+          დარეგისტრირება
         </LoadingButton>
         <Grid container>
           <Grid item>
-            <Link to='/login'>
-              {"Already have an account? Sign In"}
+            <Link to={`/${company_id}/login`}>
+              {"თუ უკვე გაქვს მომხმარებელი, შესვლა"}
             </Link>
           </Grid>
         </Grid>

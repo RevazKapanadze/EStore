@@ -22,12 +22,12 @@ import { useAppDispatch } from "../store/configureStore";
 import { fetchCurrentUser } from "../../features/account/accountSlice";
 import { fetchBasketAsync } from "../../features/basket/basketSlice";
 import { PrivateRoute } from "./PrivateRoute";
+import EmptyBasketPage from "../../features/basket/emptyBasketPage";
 
 
 
 function App() {
   const dispatch = useAppDispatch();
-  
   const [loading, setLoading] = useState(true);
 
   const initApp = useCallback(async () => {
@@ -42,7 +42,7 @@ function App() {
     initApp().then(() => setLoading(false));
   }, [initApp])
 
- 
+
   if (loading) return <LoadingComponent message='Initialising app...' />
 
   const theme = createTheme({
@@ -62,8 +62,8 @@ function App() {
           <Route path=':id' element={<ItemDetails />}></Route>
           <Route path='about' element={<AboutPage />}></Route>
           <Route element={<NotFound />} />
+          <Route element={<EmptyBasketPage />} />
           <Route path='basket' element={<BasketPage />}> </Route>
-
           <Route path='login' element={<Login />}></Route>
           <Route path='register' element={<Register />}></Route>
           <Route element={<PrivateRoute />}>

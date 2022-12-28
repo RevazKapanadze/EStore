@@ -32,6 +32,12 @@
       "type": "coreclr",
       "request": "attach"
     },
-    
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "React",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    }
   ]
 }
