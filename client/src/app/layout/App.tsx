@@ -1,4 +1,3 @@
-
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { blue } from "@mui/material/colors";
 import { Route, Routes } from "react-router-dom";
@@ -23,6 +22,7 @@ import { fetchCurrentUser } from "../../features/account/accountSlice";
 import { fetchBasketAsync } from "../../features/basket/basketSlice";
 import { PrivateRoute } from "./PrivateRoute";
 import EmptyBasketPage from "../../features/basket/emptyBasketPage";
+import AdminPanel from "../../features/adminPanel/adminPanel";
 
 
 
@@ -43,15 +43,13 @@ function App() {
   }, [initApp])
 
 
-  if (loading) return <LoadingComponent message='Initialising app...' />
+  if (loading) return <LoadingComponent message='პროდუქტები იტვირთება, გთხოვთ დაელოდოთ' />
 
   const theme = createTheme({
     palette: {
       primary: blue,
     },
   });
-
-
   return (
     <ThemeProvider theme={theme}>
       <ToastContainer position='bottom-right' hideProgressBar />
@@ -59,13 +57,14 @@ function App() {
       <Routes>
         <Route path='/:company_id' element={<Header />}>
           <Route path='' element={<Catalog />}> </Route>
-          <Route path=':id' element={<ItemDetails />}></Route>
-          <Route path='about' element={<AboutPage />}></Route>
+          <Route path=':id' element={<ItemDetails />} />
+          <Route path='about' element={<AboutPage />} />
+          <Route path='adminpanel' element={<AdminPanel />} />
           <Route element={<NotFound />} />
           <Route element={<EmptyBasketPage />} />
-          <Route path='basket' element={<BasketPage />}> </Route>
-          <Route path='login' element={<Login />}></Route>
-          <Route path='register' element={<Register />}></Route>
+          <Route path='basket' element={<BasketPage />} />
+          <Route path='login' element={<Login />} />
+          <Route path='register' element={<Register />} />
           <Route element={<PrivateRoute />}>
             <Route path="checkout" element={<CheckoutPage />} />
           </Route>

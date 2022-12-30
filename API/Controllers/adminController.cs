@@ -58,7 +58,7 @@ namespace EStore.Controllers
             return Ok(_category);
         }
 
-        [Authorize(Roles = "Admin")]
+        /*[Authorize(Roles = "Admin")]
         [HttpPost("Add_Company")]
         public async Task<ActionResult> AddCompany(companyVm _company)
         {
@@ -133,6 +133,6 @@ namespace EStore.Controllers
             user.Company_Id = company_Id;
             await _context.SaveChangesAsync();
             return Ok("Success");
-        }
+        }*/
     }
 }

@@ -60,7 +60,7 @@ namespace EStore.Controllers
             {
                 UserName = _registerVm.Username,
                 Email = _registerVm.Email,
-                IsActive = 0,
+                IsActive = 1,
                 Company_Id = 1
             };
             var result = await _user.CreateAsync(user, _registerVm.Password);

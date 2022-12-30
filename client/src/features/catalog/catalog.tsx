@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Pagination, Paper, Typography } from "@mui/material";
+import { Container, Grid, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import AppPagination from "../../app/components/appPagination";
@@ -20,7 +20,7 @@ export default function Catalog() {
   const { company_id } = useParams<{ company_id: string }>();
   const items = useAppSelector(productSelectors.selectAll);
   const dispatch = useAppDispatch();
-  const { productsLoaded, status, filterLoaded, category_Id, main_Category, size, color, productParams, metaData } = useAppSelector(state => state.catalog);
+  const { productsLoaded, filterLoaded, category_Id, main_Category, size, color, productParams, metaData } = useAppSelector(state => state.catalog);
 
   useEffect(() => {
     if (!productsLoaded) dispatch(fetchProductsAsync({ company_id: company_id! }));
@@ -28,10 +28,10 @@ export default function Catalog() {
 
   useEffect(() => {
     if (!filterLoaded) dispatch(fetchFilters({ company_id: company_id! }));
-  }, [company_id, , dispatch, filterLoaded])
+  }, [company_id, dispatch, filterLoaded])
 
-  if (!items) return <h3> პროდუქტი არ მოიძებნა</h3>
-
+  if (!items.length) return <h3> პროდუქტი არ მოიძებნა</h3>
+  if (!filterLoaded) return <LoadingComponent message='პროდუქტები იტვირთება, გთხოვთ დაელოდოთ' />
   return (
 
     <Container sx={{ marginLeft: 20, marginRight: 20 }} maxWidth="xl" >
@@ -79,8 +79,8 @@ export default function Catalog() {
           <ItemList items={items} />
         </Grid>
         <Grid sx={{ paddingTop: 5, marginLeft: 75 }} >
-          {metaData &&
-            <AppPagination metaData={metaData}
+          {metaData && 
+            < AppPagination metaData={metaData}
               onChangePage={(page: number) => dispatch(setPageNumber({ pageNumber: page }))} />
           }
         </Grid>

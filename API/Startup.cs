@@ -80,7 +80,7 @@ namespace API
                 {
                     opt.User.RequireUniqueEmail = true;
                 })
-                .AddRoles<IdentityRole>()
+                .AddRoles<role>()
                 .AddEntityFrameworkStores<AppDbContext>();
             services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

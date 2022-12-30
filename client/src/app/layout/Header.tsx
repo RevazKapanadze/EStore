@@ -1,5 +1,5 @@
 import { ShoppingCart } from "@mui/icons-material";
-import { AppBar, ListItem, Toolbar, Typography, List, Badge, IconButton, Box } from "@mui/material";
+import { AppBar, Toolbar, Typography, Badge, IconButton, Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useParams } from "react-router-dom";
 import agent from "../api/agent";
@@ -9,11 +9,6 @@ import { useAppSelector } from "../store/configureStore";
 import LoadingComponent from "./LoadingComponent";
 import SignedInMenu from "./SignedInMenu";
 
-const rightLinks = [
-  { title: 'login', path: '/login' },
-  { title: 'register', path: '/register' },
-
-]
 const navStyles = {
   color: 'black',
   typography: 'h6',
@@ -39,7 +34,7 @@ export default function Header() {
       .finally(() => setLoading(false));
   }, [company_id]
   )
-  if (loading) return <LoadingComponent message="პროდუქტები იტვირთება" />
+  if (loading) return <LoadingComponent message="პროდუქტები იტვირთება, გთხოვთ დაელოდოთ" />
   if (!company) return <h3> კომპანია არ მოიძებნა </h3>
   return (
     <><AppBar position='static' sx={{ mb: 4, bgcolor: 'white' }}>

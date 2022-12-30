@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using EStore.API.Data.Models;
 using EStore.API.Data.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 public static class BasketExtentions
 {
@@ -35,4 +37,11 @@ public static class BasketExtentions
             };
         }
     }
+
+    public static IQueryable<basket> RetriveBasketWithItems(
+        this IQueryable<basket> query,
+        string BuyerId
+    ) {
+        return query.Include(i=>i.Items).ThenInclude(p=>p.Product).Where(b=>b.BuyerId==BuyerId);
+     }
 }
