@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using API.Controllers;
 using EStore.API.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace EStore.Controllers
 {
@@ -89,6 +90,7 @@ namespace EStore.Controllers
                 Basket = userBasket?.MapbasketToVM()
             };
         }
+
 
         private async Task<basket> Retrievebasket(string buyerId)
         {

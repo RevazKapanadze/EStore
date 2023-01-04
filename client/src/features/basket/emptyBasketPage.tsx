@@ -8,7 +8,7 @@ export default function EmptyBasketPage() {
     <Container >
       <Typography gutterBottom variant='h3'> სამწუხაროთ შენ არ გავქს პროდუქტი კალათში</Typography>
       <Divider />
-      <Button onClick={() => Navigate(`/${company_id}/catalog`)}> დაბრუნდი პროდუქტებში</Button>
+      <Button onClick={() => Navigate(`/${company_id}`)}> დაბრუნდი პროდუქტებში</Button>
     </Container >
   )
 }

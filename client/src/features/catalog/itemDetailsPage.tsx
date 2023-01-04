@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab";
-import { Container, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material"
+import { Box, Container, Divider, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableRow, TextField, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"
 import agent from "../../app/api/agent";
@@ -13,7 +13,6 @@ import { clearBasket, removeBasketItemAsync, setBasket } from "../basket/basketS
 
 export default function ItemDetailsPage() {
   const { basket } = useAppSelector(state => state.basket);
-
   const { company_id } = useParams<{ company_id: string }>();
   const { id } = useParams<{ id: string }>();
   const [item, setItem] = useState<Item | null>(null);
@@ -65,9 +64,7 @@ export default function ItemDetailsPage() {
   if (loading) return <LoadingComponent message="პროდუქტი იტვირთება" />
   if (!item) return <h3> <NotFound /> </h3>
   return (
-    <><Container>
-
-
+    <Container>
       <Typography variant='h2'>
         <Grid container spacing={10} sx={{ width: '100%' }}>
           <Grid item xs={6} >
@@ -75,59 +72,63 @@ export default function ItemDetailsPage() {
           </Grid>
           <Grid item xs={6} >
             <Typography variant='h3' align='center' paddingBottom={10}>{item.short_Name} </Typography>
-            <Divider />
-            <TableContainer>
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableCell> არესებული ზომები</TableCell>
-                    <TableCell >
-                      {uniqueSize}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell> არსებული ფერები</TableCell>
-                    <TableCell> {uniqueColuor}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell> აღწერა</TableCell>
-                    <TableCell> {item.short_Description}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
             <Container>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField
-                    onChange={handleInputChange}
-                    variant='outlined'
-                    type='number'
-                    label='რაოდენობა კალათში'
-                    fullWidth
-                    value={quantity}
-                  />
+              <TableContainer>
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell> არესებული ზომები</TableCell>
+                      <TableCell >
+                        {uniqueSize}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell> არსებული ფერები</TableCell>
+                      <TableCell> {uniqueColuor}</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell> აღწერა</TableCell>
+                      <TableCell> {item.short_Description}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Container>
+            <Grid item xs={6} />
+            <Container sx={{margin: 3}}>
+              <Table >
+                <Grid container spacing={2}>
+                  <Grid item xs={6} sx={{}} >
+                    <TextField
+                      onChange={handleInputChange}
+                      variant='outlined'
+                      type='number'
+                      label='რაოდენობა კალათში'
+                      fullWidth
+                      value={quantity}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <LoadingButton
+                      disabled={item2?.quantity === quantity || !item2 && quantity === 0}
+                      loading={submitting}
+                      onClick={handleUpdateCart}
+                      sx={{ height: 0.8, alignContent:'center' }}
+                      color='primary'
+                      size='large'
+                      variant='contained'
+                      fullWidth
+                    >
+                      {item2 ? 'რაოდენობის შეცვლა' : 'კალათში დამატება'}
+                    </LoadingButton>
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <LoadingButton
-                    disabled={item2?.quantity === quantity || !item2 && quantity === 0}
-                    loading={submitting}
-                    onClick={handleUpdateCart}
-                    sx={{ height: '55px' }}
-                    color='primary'
-                    size='large'
-                    variant='contained'
-                    fullWidth
-                  >
-                    {item2 ? 'რაოდენობის შეცვლა' : 'კალათში დამატება'}
-                  </LoadingButton>
-                </Grid>
-              </Grid>
+              </Table>
             </Container>
             <Typography variant='h4' align='center' color='secondary' >{item.price}₾ </Typography>
           </Grid>
         </Grid>
       </Typography>
-    </Container></>
+    </Container>
   )
 }
 

@@ -1,10 +1,12 @@
 import { Button, Menu, Fade, MenuItem, colors, Typography } from "@mui/material";
 import React from "react";
+import { Link, useParams } from "react-router-dom";
 import { signOut } from "../../features/account/accountSlice";
 import { clearBasket } from "../../features/basket/basketSlice";
 import { useAppDispatch, useAppSelector } from "../store/configureStore";
 
 export default function SignedInMenu() {
+  const { company_id } = useParams<{ company_id: string }>();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector(state => state.account);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,7 +34,7 @@ export default function SignedInMenu() {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={handleClose}>პროფილი</MenuItem>
-        <MenuItem onClick={handleClose}>ჩემი შეკვეთები</MenuItem>
+        <MenuItem component={Link} to={`/${company_id}/orders`}> ჩემი შეკვეთები</MenuItem>
         <MenuItem onClick={() => {
           dispatch(signOut());
           dispatch(clearBasket());

@@ -1,11 +1,13 @@
 import { ShoppingCart } from "@mui/icons-material";
 import { AppBar, Toolbar, Typography, Badge, IconButton, Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, NavLink, Outlet, useParams } from "react-router-dom";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
+import { fetchBasketAsync } from "../../features/basket/basketSlice";
 import agent from "../api/agent";
 
 import { Company } from "../models/company";
-import { useAppSelector } from "../store/configureStore";
+import { useAppDispatch, useAppSelector } from "../store/configureStore";
 import LoadingComponent from "./LoadingComponent";
 import SignedInMenu from "./SignedInMenu";
 
@@ -21,6 +23,20 @@ const navStyles = {
 }
 
 export default function Header() {
+  const dispatch = useAppDispatch();
+
+
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser());
+      await dispatch(fetchBasketAsync());
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch])
+  useEffect(() => {
+    initApp().then(() => setLoading(false));
+  }, [initApp])
   const { basket } = useAppSelector(state => state.basket);
   const { user } = useAppSelector(state => state.account);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)

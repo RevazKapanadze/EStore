@@ -1,4 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { Address } from "cluster";
+import { request } from "http";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { PaginatedResponse } from "../models/pagination";
@@ -25,7 +27,7 @@ axios.interceptors.response.use(async response => {
   const pagination = response.headers['pagination'];
   if (pagination) {
     response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
-    
+
     return response;
   }
   return response
@@ -66,6 +68,12 @@ const requests = {
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody)
 }
+const orders = {
+  list: () => requests.get('orders'),
+  fetch: (id: number) => requests.get(`orders/${id}`),
+  create: (values: any) => requests.post('orders', values),
+  fetchAdress: () => requests.get('orders/saveAdress')
+}
 const main = {
   Get_Item_By_Id: (id: number, company_id: number) => requests.get(`main/Get_Item_By_Id/${id}/${company_id}`),
   Get_Item_Details: (id: number) => requests.get(`main/Get_Item_Details/${id}`),
@@ -96,7 +104,8 @@ const agent = {
   main,
   TestErrors,
   basket,
-  account
+  account,
+  orders
 }
 
 export default agent;

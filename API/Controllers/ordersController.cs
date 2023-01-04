@@ -41,7 +41,7 @@ public class ordersController : baseApiContoller
     public async Task<ActionResult<orderVm>> GetOrder(int id)
     {
         return await _context.ORDERS
-             .projectOrderToOrderVm()
+            .projectOrderToOrderVm()
             .Where(x => x.BuyerId == User.Identity.Name && x.Id == id)
             .FirstOrDefaultAsync();
     }
@@ -89,10 +89,10 @@ public class ordersController : baseApiContoller
         _context.BASKETS.Remove(basket);
         if (ordervm.SaveAdress)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(
-                x => x.UserName == User.Identity.Name
-            );
-            user.userAdress = new userAdress
+            var user = await _context.Users
+                .Include(a => a.userAdress)
+                .FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+            var adress = new userAdress
             {
                 FullName = ordervm.ShippingAdress.FullName,
                 Adress1 = ordervm.ShippingAdress.Adress1,
@@ -102,11 +102,21 @@ public class ordersController : baseApiContoller
                 Phone_Number = ordervm.ShippingAdress.Phone_Number,
                 EMail = ordervm.ShippingAdress.EMail
             };
-            _context.Update(user);
+            user.userAdress = adress;
         }
         var result = await _context.SaveChangesAsync() > 0;
         if (result)
             return CreatedAtRoute("GetOrder", new { id = order.Id }, order.Id);
         return BadRequest("რაღაც პრობლემა, გთხოვთ ცადოთ თავიდან");
+    }
+
+    [Authorize]
+    [HttpGet("saveAdress")]
+    public async Task<ActionResult<userAdress>> getSavedAdress()
+    {
+        return await _user.Users
+            .Where(x => x.UserName == User.Identity.Name)
+            .Select(user => user.userAdress)
+            .FirstOrDefaultAsync();
     }
 }
